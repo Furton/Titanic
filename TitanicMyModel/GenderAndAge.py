@@ -27,14 +27,6 @@ def GenderAgeModel(data, aTemp):
       result = pd.Series()
       result = (aTemp[1]*data.Sex + aTemp[2]*(data.Age/max) >= aTemp[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
       return result
-
-
-def GenderAgeModelNonL(data, aTemp):
-      unitySeries = UnitySeries(data)
-      max = data.Age.max()
-      result = pd.Series()
-      result = (aTemp[1]*data.Sex + aTemp[2]*(data.Age/max) + aTemp[3]*(data.Age/max) >= aTemp[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
-      return result
     
     
 def Correct(trainTemp, method,aTemp):
@@ -70,9 +62,6 @@ def Train(Model,modelName,delta,a):
 strId = 'Submission/gender_and_age_submission.csv' 
 Train(GenderAgeModel,strId,0.04,np.array([0,0,0]));
 
-
-strId = 'Submission/gender_and_age_submission.csv' 
-Train(GenderAgeModelNonL,strId,0.04,np.array([0,0,0,0]));
 
 
 
