@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+import random
 from sklearn.metrics import mean_squared_error
 
 
@@ -9,8 +11,25 @@ test = pd.read_csv('testPure.csv')
 
 
 
-def GenderAgeModel(test):
-      return test.Sex
+
+
+a = [1,1,0]
+delta = 0.05
+
+def RandomRange():
+    return 1 - 2*random.random()
+
+def UnitySeries(data):
+   return pd.Series(np.full(len(data), 1))
+
+def GenderAgeModel(data):
+      unitySeries = UnitySeries(data)
+      max = data.Age.max()
+      result = pd.Series()
+      result = (a[1]*data.Sex + a[2]*(data.Age/max) >= a[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
+      return result
+
+
 
     
     
@@ -26,6 +45,12 @@ submission['PassengerId'] = test.PassengerId
 submission['Survived'] = GenderAgeModel(test)
 
 
-print(Correct(train, GenderAgeModel))
+correctPercentage = Correct(train, GenderAgeModel)
+print(correctPercentage)
+
+
+a = [a[0] + RandomRange(),a[1] + RandomRange(),a[2] + RandomRange()]
+correctPercentage = Correct(train, GenderAgeModel)
+print(correctPercentage)
 
 submission.to_csv('Submission/gender_and_age_submission.csv',index= False)
