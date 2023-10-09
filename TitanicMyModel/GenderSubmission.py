@@ -11,8 +11,8 @@ test = pd.read_csv('testPure.csv')
 def GenderModel(test):
     return test.Sex
 
-def Error(trainTemp, method):
-    return mean_squared_error(trainTemp.Survived,GenderModel(trainTemp)) 
+def Correct(trainTemp, method):
+    return 1 - mean_squared_error(trainTemp.Survived,GenderModel(trainTemp)) 
     
 
 submission = pd.DataFrame()
@@ -20,7 +20,7 @@ submission['PassengerId'] = test.PassengerId
 submission['Survived'] = GenderModel(test)
 
 
-print(Error(train, GenderModel))
+print(Correct(train, GenderModel))
 
 submission.to_csv('Submission/gender_submission.csv',index= False)
 

@@ -14,8 +14,8 @@ def GenderAgeModel(test):
 
     
     
-def Error(trainTemp, method):
-    return mean_squared_error(trainTemp.Survived,GenderAgeModel(trainTemp)) 
+def Correct(trainTemp, method):
+    return 1 - mean_squared_error(trainTemp.Survived,GenderAgeModel(trainTemp)) 
     
 
 
@@ -26,6 +26,6 @@ submission['PassengerId'] = test.PassengerId
 submission['Survived'] = GenderAgeModel(test)
 
 
-print(Error(train, GenderAgeModel))
+print(Correct(train, GenderAgeModel))
 
 submission.to_csv('Submission/gender_and_age_submission.csv',index= False)

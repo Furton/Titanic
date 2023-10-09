@@ -40,6 +40,18 @@ cabinMap = {
 "T":    8
 }
 
+fare = pd.DataFrame()
+fare = pd.concat([trainData.Fare, testData.Fare], ignore_index=True)
+medianFare = fare.median()
+
+
+age = pd.DataFrame()
+age = pd.concat([trainData.Age, testData.Age], ignore_index=True)
+medianAge = age.median()
+
+
+
+
 def PrepareProperties(data):
     result = pd.DataFrame()
     result  = data.copy(deep=True);
@@ -58,10 +70,10 @@ def PrepareProperties(data):
     result.Cabin = result.Cabin.apply(lambda cabin: cabin[:1])
     result.Cabin = result.Cabin.map(cabinMap)
     
-    result.Fare = result.Fare.fillna(result.Fare.median())
+    result.Fare = result.Fare.fillna(medianFare)
     
     
-    result.Age = result.Age.fillna(result.Age.median())
+    result.Age = result.Age.fillna(medianAge)
 
 
     return result;
