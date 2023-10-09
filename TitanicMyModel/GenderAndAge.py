@@ -13,8 +13,8 @@ test = pd.read_csv('testPure.csv')
 
 
 
-a = [1,1,0]
-delta = 0.05
+a = np.array([1,1,0])
+delta = 0.2
 
 def RandomRange():
     return 1 - 2*random.random()
@@ -22,35 +22,44 @@ def RandomRange():
 def UnitySeries(data):
    return pd.Series(np.full(len(data), 1))
 
-def GenderAgeModel(data):
+def GenderAgeModel(data, aTemp):
       unitySeries = UnitySeries(data)
       max = data.Age.max()
       result = pd.Series()
-      result = (a[1]*data.Sex + a[2]*(data.Age/max) >= a[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
+      result = (aTemp[1]*data.Sex + aTemp[2]*(data.Age/max) >= aTemp[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
       return result
 
 
 
     
     
-def Correct(trainTemp, method):
-    return 1 - mean_squared_error(trainTemp.Survived,GenderAgeModel(trainTemp)) 
+def Correct(trainTemp, method,aTemp):
+    return 1 - mean_squared_error(trainTemp.Survived,GenderAgeModel(trainTemp,aTemp)) 
     
 
 
 
 
+
+
+
+correctPercentage = Correct(train, GenderAgeModel,a)
+print(correctPercentage)
+
+
+
+i = 0
+while i<1000:
+  b = np.copy(delta*np.array([RandomRange(),RandomRange(),RandomRange()]) + a)
+  correctPercentageTemp = Correct(train, GenderAgeModel,b)
+  if correctPercentageTemp > correctPercentage:
+     correctPercentage = correctPercentageTemp 
+     a = np.copy(b)
+     print(correctPercentage)
+  i = i + 1  
+
+print(a)
 submission = pd.DataFrame()
 submission['PassengerId'] = test.PassengerId
-submission['Survived'] = GenderAgeModel(test)
-
-
-correctPercentage = Correct(train, GenderAgeModel)
-print(correctPercentage)
-
-
-a = [a[0] + RandomRange(),a[1] + RandomRange(),a[2] + RandomRange()]
-correctPercentage = Correct(train, GenderAgeModel)
-print(correctPercentage)
-
+submission['Survived'] = GenderAgeModel(test,a)
 submission.to_csv('Submission/gender_and_age_submission.csv',index= False)
