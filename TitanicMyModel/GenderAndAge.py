@@ -27,6 +27,13 @@ def GenderAgeModel(data, aTemp):
       result = pd.Series()
       result = (aTemp[1]*data.Sex + aTemp[2]*(data.Age/max) >= aTemp[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
       return result
+
+def LinearModel(data, aTemp):
+      unitySeries = UnitySeries(data)
+      result = pd.Series()
+      result = (aTemp[1]*data.Sex + aTemp[2]*(data.Age/data.Age.max()) + aTemp[3]*(data.Pclass/data.Pclass.max()) + aTemp[4]*(data.Name/data.Name.max()) + aTemp[5]*(data.Cabin/data.Cabin.max()) >= aTemp[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
+      return result
+
     
     
 def Correct(trainTemp, method,aTemp):
@@ -43,7 +50,7 @@ def Train(Model,modelName,delta,a):
   correctPercentage = Correct(train, Model,a)
   print(correctPercentage)
   i = 0
-  while i<1000:
+  while i<1400:
       b = np.copy(delta*RandomRange(a) + a)
       correctPercentageTemp = Correct(train, Model,b)
       if correctPercentageTemp > correctPercentage:
@@ -59,10 +66,11 @@ def Train(Model,modelName,delta,a):
   
  
 
-strId = 'Submission/gender_and_age_submission.csv' 
-Train(GenderAgeModel,strId,0.04,np.array([0,0,0]));
+#strId = 'Submission/gender_and_age_submission.csv' 
+#Train(GenderAgeModel,strId,0.04,np.array([0,0,0]));
 
 
-
+strId = 'Submission/linear_submission.csv' 
+Train(LinearModel,strId,0.04,np.array([0,0,0,0,0,0]));
 
   
