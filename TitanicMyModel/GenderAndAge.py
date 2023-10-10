@@ -12,6 +12,6 @@ test = pd.read_csv('testPure.csv')
 
 
 strId = 'Submission/linear_submission.csv' 
-trainModels.Train(trainModels.LinearModel,strId,0.04,np.array([0,0,0,0,0,0]), train,test);
+trainModels.Train(trainModels.LinearModel,strId,0.04,np.array([0,0,0,0,0,0,0]), train,test);
 
   

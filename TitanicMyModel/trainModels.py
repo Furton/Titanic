@@ -19,7 +19,7 @@ def GenderAgeModel(data, aTemp):
 def LinearModel(data, aTemp):
       unitySeries = UnitySeries(data)
       result = pd.Series()
-      result = (aTemp[1]*data.Sex + aTemp[2]*(data.Age/data.Age.max()) + aTemp[3]*(data.Pclass/data.Pclass.max()) + aTemp[4]*(data.Name/data.Name.max()) + aTemp[5]*(data.Cabin/data.Cabin.max()) >= aTemp[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
+      result = (aTemp[1]*data.Sex + aTemp[2]*(data.Age/data.Age.max()) + aTemp[3]*(data.Pclass/data.Pclass.max()) + aTemp[4]*(data.Fare/data.Fare.max()) + aTemp[4]*(data.Name/data.Name.max()) + aTemp[5]*(data.Cabin/data.Cabin.max()) >= aTemp[0]*unitySeries).map({False: 0,True: 1}).copy(deep=True);
       return result
 
     
@@ -38,7 +38,7 @@ def Train(Model,modelName,delta,a,train,test):
   correctPercentage = Correct(train, Model,a)
   print(correctPercentage)
   i = 0
-  while i<1400:
+  while i<1600:
       b = np.copy(delta*RandomRange(a) + a)
       correctPercentageTemp = Correct(train, Model,b)
       if correctPercentageTemp > correctPercentage:
